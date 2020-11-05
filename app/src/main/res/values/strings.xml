@@ -5,4 +5,6 @@
     <string name="tab_text_3">Settings</string>
     <string name="channel_name">Reminder Channel</string>
     <string name="channel_description">Channel for notifications reminding the user to complete daily tasks</string>
+    <string name="open_app">Launching Luna\'s Reminder Daemon</string>
+    <string name="click_app">Launching</string>
 </resources>

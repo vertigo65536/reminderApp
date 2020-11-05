@@ -3,45 +3,36 @@ package com.example.lunasreminder;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.os.IBinder;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import static java.lang.Thread.sleep;
-
-public class ReminderService extends Service {
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+public class ReminderJobService extends JobService {
+    private static final String TAG = "SyncService";
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        int i = 0;
-        showNotification(this, "Test", "Message", intent, i);
-        /*while(true){
-            showNotification(this, "Test", "Message", intent, i);
-            try {
-                sleep(1000);
-            } catch (Exception e) {
-                break;
-            }
-            i++;
-            if (i == 5) {
-                break;
-            }
-        }*/
-        return Service.START_NOT_STICKY;
+    public boolean onStartJob(JobParameters params) {
+        Intent intents = new Intent(getApplicationContext(), MainActivity.class);
+        showNotification(this, "Todo Reminder",
+                "Check your todo's, and check off anything you've done!",
+                intents,
+                1
+        );
+        Util.scheduleJob(getApplicationContext());
+        return true;
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        //TODO for communication return IBinder implementation
-        return null;
+    public boolean onStopJob(JobParameters params) {
+        return true;
     }
-
     /**
      *
      * @param context

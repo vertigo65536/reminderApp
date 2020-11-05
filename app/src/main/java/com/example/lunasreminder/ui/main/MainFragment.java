@@ -1,6 +1,7 @@
 package com.example.lunasreminder.ui.main;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,6 +35,7 @@ import com.example.lunasreminder.DailyDBManager;
 import com.example.lunasreminder.MainActivity;
 import com.example.lunasreminder.SingleDBManager;
 import com.example.lunasreminder.R;
+import com.example.lunasreminder.Util;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -50,9 +52,9 @@ public class MainFragment extends Fragment{
     private View root;
     private LinearLayout scrollLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private int dailyPrefix = 10000;
-    private int repeatPrefix = 20000;
-    private int calendarPrefix = 30000;
+    final private int dailyPrefix = 10000;
+    final private int repeatPrefix = 20000;
+    final private int calendarPrefix = 30000;
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private PageViewModel pageViewModel;

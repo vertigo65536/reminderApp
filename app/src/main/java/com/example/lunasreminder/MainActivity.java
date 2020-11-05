@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lunasreminder.ui.main.SectionsPagerAdapter;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        Util.scheduleJob(this);
         /*Intent i= new Intent(this, ReminderService.class);
         // potentially add data to the intent
         i.putExtra("KEY1", "Value to be used by the service");

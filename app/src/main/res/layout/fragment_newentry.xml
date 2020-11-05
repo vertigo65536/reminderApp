@@ -35,7 +35,8 @@
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/radioButton1">
         <RadioButton
             android:id="@+id/radioButton1"
             android:layout_width="match_parent"

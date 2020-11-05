@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LunasReminder">
-        <service android:name=".ReminderService" />
+        <service
+            android:name=".ReminderJobService"
+            android:label="Word service"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
         <receiver android:name=".StartupReceiver"
             android:enabled="true"
             android:exported="true">
