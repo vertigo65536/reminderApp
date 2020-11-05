@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lunasreminder.DailyDBManager;
 import com.example.lunasreminder.SingleDBManager;
 import com.example.lunasreminder.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,11 +30,11 @@ import java.util.Date;
  */
 public class NewEntryFragment extends Fragment {
     private SingleDBManager singleDbManager;
+    private DailyDBManager dailyDbManager;
     DatePickerDialog picker;
     Button btn;
     EditText name;
     EditText description;
-    TextView date;
     TextView dateView;
     RadioGroup radioGroup;
     View root;
@@ -67,7 +68,7 @@ public class NewEntryFragment extends Fragment {
             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         singleDbManager = new SingleDBManager(getActivity());
-        singleDbManager.open();
+        dailyDbManager = new DailyDBManager(getActivity());
         root = inflater.inflate(R.layout.fragment_newentry, container, false);
 
         btn = (Button) root.findViewById(R.id.button);
@@ -94,24 +95,61 @@ public class NewEntryFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                final TextView date = (TextView) root.findViewById(R.id.date);
-                final String nameStr = name.getText().toString();
-                final String descStr = description.getText().toString();
-                final String dateStr = date.getText().toString();
-
-                singleDbManager.insert(
-                        nameStr,
-                        descStr,
-                        dateStr,
-                        Boolean.FALSE
-                );
-                singleDbManager.close();
-                clear();
-                Snackbar mySnackbar = Snackbar.make(root, "Saved", 5000);
+                int checkedId = radioGroup.getCheckedRadioButtonId();
+                Boolean success = Boolean.FALSE;
+                switch(checkedId) {
+                    case R.id.radioButton1:
+                        success = insertDailyEntry();
+                        break;
+                    case R.id.radioButton2:
+                        break;
+                    case R.id.radioButton3:
+                        success = insertSingleEntry();
+                        break;
+                }
+                Snackbar mySnackbar;
+                if (success == Boolean.TRUE) {
+                    mySnackbar = Snackbar.make(root, "Saved", 5000);
+                    clear();
+                } else {
+                    mySnackbar = Snackbar.make(root, "You have left some empty forms", 5000);
+                }
                 mySnackbar.show();
             }
         });
         return root;
+    }
+
+    private Boolean insertDailyEntry() {
+        dailyDbManager.open();
+        final String nameStr = name.getText().toString();
+        final String descStr = description.getText().toString();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-d");
+        final String dateStr = df.format(new Date());
+        dailyDbManager.insert(
+                nameStr,
+                descStr,
+                dateStr
+        );
+        //dailyDbManager.close();
+        return Boolean.TRUE;
+    }
+
+    private Boolean insertSingleEntry() {
+        singleDbManager.open();
+        final TextView date = (TextView) root.findViewById(R.id.date);
+        final String nameStr = name.getText().toString();
+        final String descStr = description.getText().toString();
+        final String dateStr = date.getText().toString();
+
+        singleDbManager.insert(
+                nameStr,
+                descStr,
+                dateStr,
+                Boolean.FALSE
+        );
+        singleDbManager.close();
+        return Boolean.TRUE;
     }
 
     private void drawDailyReminder(){
@@ -126,10 +164,12 @@ public class NewEntryFragment extends Fragment {
         TextView dateView = new TextView(getActivity());
         dateView.setId(R.id.date);
         dateView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-d");
         dateView.setText(df.format(new Date()));
-        dateView.setTextSize(20);
+        dateView.setTextSize(25);
+        dateView.setPadding(30, 20, 30, 20);
         variableLayout.addView(dateView);
+        variableLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {

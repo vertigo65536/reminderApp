@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class SingleDBManager {
 
-    private SingleDatabaseHelper dbHelper;
+    private DatabaseHelper dbHelper;
 
     private Context context;
 
@@ -19,7 +19,7 @@ public class SingleDBManager {
     }
 
     public SingleDBManager open() throws SQLException {
-        dbHelper = new SingleDatabaseHelper(context);
+        dbHelper = new DatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
         return this;
     }
@@ -30,34 +30,42 @@ public class SingleDBManager {
 
     public void insert(String name, String desc, String date, Boolean completed) {
         ContentValues contentValue = new ContentValues();
-        contentValue.put(SingleDatabaseHelper.NAME, name);
-        contentValue.put(SingleDatabaseHelper.DESC, desc);
-        contentValue.put(SingleDatabaseHelper.DATE, date);
-        contentValue.put(SingleDatabaseHelper.COMPLETED, completed);
-        database.insert(SingleDatabaseHelper.TABLE_NAME, null, contentValue);
+        contentValue.put(DatabaseHelper.SINGLE_NAME, name);
+        contentValue.put(DatabaseHelper.SINGLE_DESC, desc);
+        contentValue.put(DatabaseHelper.SINGLE_DATE, date);
+        contentValue.put(DatabaseHelper.SINGLE_COMPLETED, completed);
+        database.insert(DatabaseHelper.SINGLE_TABLE_NAME, null, contentValue);
     }
 
     public Cursor fetch() {
-        String[] columns = new String[] { SingleDatabaseHelper._ID, SingleDatabaseHelper.NAME,
-                SingleDatabaseHelper.DESC, SingleDatabaseHelper.DATE, SingleDatabaseHelper.COMPLETED };
-        Cursor cursor = database.query(SingleDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null);
+        String[] columns = new String[] { DatabaseHelper.SINGLE__ID, DatabaseHelper.SINGLE_NAME,
+                DatabaseHelper.SINGLE_DESC, DatabaseHelper.SINGLE_DATE, DatabaseHelper.SINGLE_COMPLETED };
+        Cursor cursor = database.query(DatabaseHelper.SINGLE_TABLE_NAME, columns, null, null, null, null, DatabaseHelper.SINGLE_DATE+" ASC");
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
-    public int update(long _id, String name, String desc, String date) {
+    public int update(long _id, String name, String desc, String date, Boolean completed) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SingleDatabaseHelper.NAME, name);
-        contentValues.put(SingleDatabaseHelper.DESC, desc);
-        contentValues.put(SingleDatabaseHelper.DATE, date);
-        int i = database.update(SingleDatabaseHelper.TABLE_NAME, contentValues, SingleDatabaseHelper._ID + " = " + _id, null);
+        contentValues.put(DatabaseHelper.SINGLE_NAME, name);
+        contentValues.put(DatabaseHelper.SINGLE_DESC, desc);
+        contentValues.put(DatabaseHelper.SINGLE_DATE, date);
+        contentValues.put(DatabaseHelper.SINGLE_COMPLETED, completed);
+        int i = database.update(DatabaseHelper.SINGLE_TABLE_NAME, contentValues, DatabaseHelper.SINGLE__ID + " = " + _id, null);
+        return i;
+    }
+
+    public int updateCompleted(long _id,  Boolean completed) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.SINGLE_COMPLETED, completed);
+        int i = database.update(DatabaseHelper.SINGLE_TABLE_NAME, contentValues, DatabaseHelper.SINGLE__ID + " = " + _id, null);
         return i;
     }
 
     public void delete(long _id) {
-        database.delete(SingleDatabaseHelper.TABLE_NAME, SingleDatabaseHelper._ID + "=" + _id, null);
+        database.delete(DatabaseHelper.SINGLE_TABLE_NAME, DatabaseHelper.SINGLE__ID + "=" + _id, null);
     }
 
 }
