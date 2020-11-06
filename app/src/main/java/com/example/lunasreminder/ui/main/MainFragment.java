@@ -402,6 +402,13 @@ public class MainFragment extends Fragment{
                 populateList();
             }
         });
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                vibrate(5000);
+                return true;
+            }
+        });
     }
 
     private void vibrate(int len) {
@@ -440,9 +447,6 @@ public class MainFragment extends Fragment{
             }
             try {
                 return dateFormat.format(dateFormat.parse(today()).getTime() - (difference * 24 * 60 * 60 * 1000));
-                /*while (getDayOfWeek(dateFormat.format(dayStamp)).equals(getDayOfWeek(date))) {
-                    dayStamp = dateFormat.parse(Integer.toString(dayStamp.getDate() - ));
-                }*/
             } catch (Exception e) {
                 return "";
             }

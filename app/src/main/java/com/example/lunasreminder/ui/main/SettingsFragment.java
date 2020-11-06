@@ -133,7 +133,7 @@ public class SettingsFragment extends Fragment {
                             case "timer":
                                 EditText settingTimer = root.findViewById(id);
                                 value = settingTimer.getText().toString();
-                                if (value.isEmpty()) {
+                                if (value.isEmpty() | value.equals("0")) {
                                     value = "1";
                                 }
                                 value = Integer.toString((Integer.parseInt(value) * 60000));

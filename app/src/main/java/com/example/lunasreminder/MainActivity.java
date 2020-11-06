@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -31,5 +34,14 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         Util.scheduleJob(this);
+        View btn = this.findViewById(R.id.appbar);
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecretActivity.class);
+                MainActivity.this.startActivity(intent);
+                return true;
+            }
+        });
     }
 }
