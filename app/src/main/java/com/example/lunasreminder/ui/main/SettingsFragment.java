@@ -29,7 +29,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 
 public class SettingsFragment extends Fragment {
@@ -155,7 +154,13 @@ public class SettingsFragment extends Fragment {
                         nextAlarm = Util.scheduleJob(getActivity());
                     }
                     SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                    snackbar = Snackbar.make(root, "Settings updated. Next notification at " + df.format(nextAlarm), 5000);
+                    String notificationMessage;
+                    if (nextAlarm == -1) {
+                        notificationMessage = "Notifications disabled.";
+                    } else {
+                        notificationMessage = "Next notification at " + df.format(nextAlarm);
+                    }
+                    snackbar = Snackbar.make(root, "Settings updated. " + notificationMessage, 5000);
                 } catch (Exception e) {
                     snackbar = Snackbar.make(root, "An error occurred", 5000);
                 }

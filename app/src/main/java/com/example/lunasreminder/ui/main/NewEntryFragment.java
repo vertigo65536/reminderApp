@@ -2,14 +2,18 @@ package com.example.lunasreminder.ui.main;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,20 +21,29 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lunasreminder.DailyDBManager;
+import com.example.lunasreminder.RepeatDBManager;
 import com.example.lunasreminder.SingleDBManager;
 import com.example.lunasreminder.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.stream.IntStream;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class NewEntryFragment extends Fragment {
+    private static final String TAG = "lunasreminder.NewEntryFragment";
     private SingleDBManager singleDbManager;
     private DailyDBManager dailyDbManager;
+    private RepeatDBManager repeatDbManager;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
+    Spinner dropdown;
+    Spinner dropdownDay;
+    LinearLayout dropdownLayout;
     DatePickerDialog picker;
     Button btn;
     EditText name;
@@ -69,6 +82,7 @@ public class NewEntryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         singleDbManager = new SingleDBManager(getActivity());
         dailyDbManager = new DailyDBManager(getActivity());
+        repeatDbManager = new RepeatDBManager(getActivity());
         root = inflater.inflate(R.layout.fragment_newentry, container, false);
 
         btn = (Button) root.findViewById(R.id.button);
@@ -87,6 +101,7 @@ public class NewEntryFragment extends Fragment {
                         drawRepeating();
                         break;
                     case R.id.radioButton3:
+                        variableLayout.removeAllViews();
                         drawCalendarEvent();
                         break;
                 }
@@ -102,6 +117,7 @@ public class NewEntryFragment extends Fragment {
                         success = insertDailyEntry();
                         break;
                     case R.id.radioButton2:
+                        success = insertRepeatEntry();
                         break;
                     case R.id.radioButton3:
                         success = insertSingleEntry();
@@ -121,35 +137,74 @@ public class NewEntryFragment extends Fragment {
     }
 
     private Boolean insertDailyEntry() {
-        dailyDbManager.open();
-        final String nameStr = name.getText().toString();
-        final String descStr = description.getText().toString();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-d");
-        final String dateStr = df.format(new Date());
-        dailyDbManager.insert(
-                nameStr,
-                descStr,
-                dateStr
-        );
-        //dailyDbManager.close();
-        return Boolean.TRUE;
+        try {
+            dailyDbManager.open();
+            final String nameStr = name.getText().toString();
+            final String descStr = description.getText().toString();
+            final String dateStr = today();
+            dailyDbManager.insert(
+                    nameStr,
+                    descStr,
+                    dateStr
+            );
+            dailyDbManager.close();
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            Log.d(TAG, e.getStackTrace().toString());
+            return Boolean.FALSE;
+        }
+    }
+
+    private Boolean insertRepeatEntry() {
+        try {
+            repeatDbManager.open();
+            final String nameStr = name.getText().toString();
+            final String descStr = description.getText().toString();
+            final TextView date = variableLayout.findViewById(R.id.date);
+            String dateStr;
+            try {
+                dateStr = date.getText().toString();
+            } catch (Exception e) {
+                dateStr = "";
+            }
+            final String type = dropdown.getSelectedItem().toString();
+
+            repeatDbManager.insert(
+                    nameStr,
+                    descStr,
+                    type,
+                    dateStr,
+                    dateFormat.format(new Date().getTime() - Long.parseLong("86400000"))
+            );
+
+            repeatDbManager.close();
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            Log.d(TAG, e.getStackTrace().toString());
+            return Boolean.FALSE;
+        }
     }
 
     private Boolean insertSingleEntry() {
-        singleDbManager.open();
-        final TextView date = (TextView) root.findViewById(R.id.date);
-        final String nameStr = name.getText().toString();
-        final String descStr = description.getText().toString();
-        final String dateStr = date.getText().toString();
+        try {
+            singleDbManager.open();
+            final TextView date = (TextView) root.findViewById(R.id.date);
+            final String nameStr = name.getText().toString();
+            final String descStr = description.getText().toString();
+            final String dateStr = date.getText().toString();
 
-        singleDbManager.insert(
-                nameStr,
-                descStr,
-                dateStr,
-                Boolean.FALSE
-        );
-        singleDbManager.close();
-        return Boolean.TRUE;
+            singleDbManager.insert(
+                    nameStr,
+                    descStr,
+                    dateStr,
+                    Boolean.FALSE
+            );
+            singleDbManager.close();
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            Log.d(TAG, e.getStackTrace().toString());
+            return Boolean.FALSE;
+        }
     }
 
     private void drawDailyReminder(){
@@ -158,14 +213,54 @@ public class NewEntryFragment extends Fragment {
 
     private void drawRepeating() {
         variableLayout.removeAllViews();
+        drawCalendarEvent();
+        dropdown = new Spinner(getActivity());
+        dropdown.setId((int)69);
+        //String[] values = new String[] {"Weekly","Biweekly","Monthly"};
+        String[] values = new String[] {"Weekly", "Monthly"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+            getActivity(),
+            android.R.layout.simple_spinner_dropdown_item,
+            values
+        );
+        dropdown.setAdapter(adapter);
+        dropdown.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        variableLayout.addView(dropdown);
+        dropdownLayout = new LinearLayout(getActivity());
+        dropdownLayout.setOrientation(LinearLayout.VERTICAL);
+        dropdownLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        variableLayout.addView(dropdownLayout);
+        TextView newTextView = new TextView(getActivity());
+        newTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        dropdownLayout.addView(newTextView);
+    }
+
+    private void drawDayView() {
+        dropdownDay = new Spinner(getActivity());
+        dropdownDay.setId((int)420);
+        String[] values = new String[]{
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                values
+        );
+        dropdownDay.setAdapter(adapter);
+        dropdownLayout.addView(dropdownDay);
     }
 
     private void drawCalendarEvent() {
         TextView dateView = new TextView(getActivity());
         dateView.setId(R.id.date);
         dateView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-d");
-        dateView.setText(df.format(new Date()));
+        dateView.setText(today());
         dateView.setTextSize(25);
         dateView.setPadding(30, 20, 30, 20);
         variableLayout.addView(dateView);
@@ -194,5 +289,10 @@ public class NewEntryFragment extends Fragment {
         if (name != null) name.setText("");
         if (description != null) description.setText("");
         if (dateView != null) dateView.setText("");
+    }
+
+    private String today () {
+        final String dateStr = dateFormat.format(new Date());
+        return dateStr;
     }
 }

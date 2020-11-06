@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class SettingsDBManager {
+
+    private static final String TAG = "lunasreminder.SettingsDBManager";
 
     private DatabaseHelper dbHelper;
 
@@ -75,6 +78,8 @@ public class SettingsDBManager {
 
     }
 
+    public Boolean getNotifications() { return Boolean.parseBoolean(getValue(0)); }
+
     public long getInterval() {
         return Long.parseLong(getValue(1));
     }
@@ -88,14 +93,18 @@ public class SettingsDBManager {
     }
 
     public void populateSettings() {
-        insert("Turn Notifications On", "false", 0, "bool",
-                "Turn on reminder notifications which fire on a given interval");
-        insert("Interval", "10000", 1, "timer",
-                "Interval between notifications. Given in minutes");
-        insert("Active Start Time", "10:00", 2, "time",
-                "Time beginning period of the notification fire time");
-        insert("Active End Time", "23:00",3, "time",
-                "The end period of the notification fire time");
+        try {
+            insert("Turn Notifications On", "false", 0, "bool",
+                    "Turn on reminder notifications which fire on a given interval");
+            insert("Interval", "3600000", 1, "timer",
+                    "Interval between notifications. Given in minutes");
+            insert("Active Start Time", "10:00", 2, "time",
+                    "Time beginning period of the notification fire time");
+            insert("Active End Time", "23:00", 3, "time",
+                    "The end period of the notification fire time");
+        } catch (Exception e) {
+            Log.d(TAG, "Attempted to populate SETTINGS table, but it was already full");
+        }
     }
 
 }

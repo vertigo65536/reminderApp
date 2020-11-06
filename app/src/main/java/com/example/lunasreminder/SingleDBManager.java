@@ -40,7 +40,13 @@ public class SingleDBManager {
     public Cursor fetch() {
         String[] columns = new String[] { DatabaseHelper.SINGLE__ID, DatabaseHelper.SINGLE_NAME,
                 DatabaseHelper.SINGLE_DESC, DatabaseHelper.SINGLE_DATE, DatabaseHelper.SINGLE_COMPLETED };
-        Cursor cursor = database.query(DatabaseHelper.SINGLE_TABLE_NAME, columns, null, null, null, null, DatabaseHelper.SINGLE_DATE+" ASC");
+        Cursor cursor = database.query(
+                DatabaseHelper.SINGLE_TABLE_NAME, columns,
+                null,
+                null,
+                null,
+                null,
+                DatabaseHelper.SINGLE_DATE+" ASC");
         if (cursor != null) {
             cursor.moveToFirst();
         }

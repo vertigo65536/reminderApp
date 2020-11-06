@@ -10,6 +10,9 @@ public class Util {
     public static long scheduleJob(Context context) {
         SettingsDBManager settingsDbManager = new SettingsDBManager(context);
         settingsDbManager.open();
+        if (!settingsDbManager.getNotifications()) {
+            return -1;
+        }
         String startTime = settingsDbManager.getStartTime();
         String endTime = settingsDbManager.getEndTime();
         Long interval = settingsDbManager.getInterval();

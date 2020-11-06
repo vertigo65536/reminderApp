@@ -31,9 +31,5 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         Util.scheduleJob(this);
-        /*Intent i= new Intent(this, ReminderService.class);
-        // potentially add data to the intent
-        i.putExtra("KEY1", "Value to be used by the service");
-        this.startService(i);*/
     }
 }

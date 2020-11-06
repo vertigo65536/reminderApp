@@ -9,6 +9,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table Name
     public static final String DAILY_TABLE_NAME = "DAILY";
+    public static final String REPEAT_TABLE_NAME = "REPEAT";
     public static final String SINGLE_TABLE_NAME = "SINGLE";
     public static final String SETTINGS_TABLE_NAME = "SETTINGS";
 
@@ -17,6 +18,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DAILY_NAME = "name";
     public static final String DAILY_DESC = "description";
     public static final String DAILY_COMPLETED = "lastCompleted";
+
+    // Repeat Table columns
+    public static final String REPEAT__ID = "_id";
+    public static final String REPEAT_NAME = "name";
+    public static final String REPEAT_DESC = "description";
+    public static final String REPEAT_TYPE = "type";
+    public static final String REPEAT_DATE = "date";
+    public static final String REPEAT_COMPLETED = "completed";
 
     // Single Table columns
     public static final String SINGLE__ID = "_id";
@@ -40,8 +49,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Creating daily table query
     private static final String DAILY_CREATE_TABLE = "create table " + DAILY_TABLE_NAME + "(" + DAILY__ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, " + DAILY_NAME + " TEXT NOT NULL, " + DAILY_DESC + " TEXT"
-            + ", " + DAILY_COMPLETED + " DATE);";
+            + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, " + DAILY_NAME + " TEXT NOT NULL, " + DAILY_DESC + " TEXT, "
+            + DAILY_COMPLETED + " DATE);";
+
+    // Creating daily table query
+    private static final String REPEAT_CREATE_TABLE = "create table " + REPEAT_TABLE_NAME + "(" + REPEAT__ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, " + REPEAT_NAME + " TEXT NOT NULL, " + REPEAT_DESC + " TEXT,"
+            + REPEAT_DATE + " DATE NOT NULL," + REPEAT_TYPE + " TEXT NOT NULL," + REPEAT_COMPLETED + " DATE);";
 
     // Creating single table query
     private static final String SINGLE_CREATE_TABLE = "create table " + SINGLE_TABLE_NAME + "(" + SINGLE__ID
@@ -60,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DAILY_CREATE_TABLE);
+        db.execSQL(REPEAT_CREATE_TABLE);
         db.execSQL(SINGLE_CREATE_TABLE);
         db.execSQL(SETTINGS_CREATE_TABLE);
     }
@@ -67,6 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DAILY_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + REPEAT_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SINGLE_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SETTINGS_TABLE_NAME);
         onCreate(db);
