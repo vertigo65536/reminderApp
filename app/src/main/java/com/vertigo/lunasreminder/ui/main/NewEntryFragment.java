@@ -1,4 +1,4 @@
-package com.example.lunasreminder.ui.main;
+package com.vertigo.lunasreminder.ui.main;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,17 +19,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lunasreminder.DailyDBManager;
-import com.example.lunasreminder.RepeatDBManager;
-import com.example.lunasreminder.SingleDBManager;
-import com.example.lunasreminder.R;
+import com.vertigo.lunasreminder.DailyDBManager;
+import com.vertigo.lunasreminder.RepeatDBManager;
+import com.vertigo.lunasreminder.SingleDBManager;
+import com.vertigo.lunasreminder.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.stream.IntStream;
 
 /**
  * A placeholder fragment containing a simple view.

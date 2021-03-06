@@ -1,4 +1,4 @@
-package com.example.lunasreminder.ui.main;
+package com.vertigo.lunasreminder.ui.main;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

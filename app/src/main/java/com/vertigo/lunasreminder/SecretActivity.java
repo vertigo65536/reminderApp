@@ -1,16 +1,11 @@
-package com.example.lunasreminder;
+package com.vertigo.lunasreminder;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import com.example.lunasreminder.ui.main.SectionsPagerAdapter;
-import com.google.android.material.tabs.TabLayout;
 
 public class SecretActivity extends AppCompatActivity {
 

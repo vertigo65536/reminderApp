@@ -1,24 +1,15 @@
-package com.example.lunasreminder;
+package com.vertigo.lunasreminder;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.core.app.NotificationCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.lunasreminder.ui.main.SectionsPagerAdapter;
+import com.vertigo.lunasreminder.ui.main.SectionsPagerAdapter;
 
 import static java.lang.Thread.sleep;
 

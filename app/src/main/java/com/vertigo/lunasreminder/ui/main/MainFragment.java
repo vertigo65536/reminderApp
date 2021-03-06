@@ -1,4 +1,4 @@
-package com.example.lunasreminder.ui.main;
+package com.vertigo.lunasreminder.ui.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,11 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.lunasreminder.DailyDBManager;
-import com.example.lunasreminder.DatabaseHelper;
-import com.example.lunasreminder.RepeatDBManager;
-import com.example.lunasreminder.SingleDBManager;
-import com.example.lunasreminder.R;
+import com.vertigo.lunasreminder.DailyDBManager;
+import com.vertigo.lunasreminder.DatabaseHelper;
+import com.vertigo.lunasreminder.RepeatDBManager;
+import com.vertigo.lunasreminder.SingleDBManager;
+import com.vertigo.lunasreminder.R;
 
 import java.text.SimpleDateFormat;
 import java.time.YearMonth;

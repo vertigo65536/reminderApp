@@ -1,4 +1,4 @@
-package com.example.lunasreminder.ui.main;
+package com.vertigo.lunasreminder.ui.main;
 
 import android.app.TimePickerDialog;
 import android.database.Cursor;
@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import com.example.lunasreminder.DatabaseHelper;
-import com.example.lunasreminder.R;
-import com.example.lunasreminder.SettingsDBManager;
-import com.example.lunasreminder.Util;
+import com.vertigo.lunasreminder.DatabaseHelper;
+import com.vertigo.lunasreminder.R;
+import com.vertigo.lunasreminder.SettingsDBManager;
+import com.vertigo.lunasreminder.Util;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;

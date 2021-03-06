@@ -1,4 +1,4 @@
-package com.example.lunasreminder;
+package com.vertigo.lunasreminder;
 
 import android.content.Context;
 
